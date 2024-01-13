@@ -1,11 +1,11 @@
 const timerTracker = document.querySelector(".timer");
-//const startScreen = document.querySelector("#start-screen");
+const startScreen = document.querySelector("#start-screen");
 const start = document.querySelector("#start");
 const question = document.querySelector("#questions");
 const questionTitle = document.querySelector("#question-title");
 const codeExample = document.querySelector("#codeExample");
 const options = document.querySelector("#options");
-//const endScreen = document.querySelector("#end-screen");
+const endScreen = document.querySelector("#end-screen");
 const finalScore = document.querySelector("#final-score");
 const initials = document.querySelector("#initials");
 const submitButton = document.querySelector("#submit");
@@ -13,6 +13,8 @@ const feedback = document.querySelector("#feedback");
 
 let timer;
 let timerCount;
+let quizFinished = false;
+let wrongAnswer = false;
 
 let optionsIndexNumber = 0;
 
@@ -55,60 +57,46 @@ function toggleDivBlocks(){
 
 
 
-
-
 // The startQuiz function is called when the start button is clicked
 function startQuiz() {
-  timerCount = 10;
+  quizFinished = false;
+  timerCount = 5;
   
   renderQuestions()
   // renderPossibleAnswers()  // displayes 1 question on screen 
-  //startTimer()
+  startTimer()
 }
-
 
 
 
 // The startTimer function starts and stops the timer and triggers quizIsOver()
-// if selected answer is incorrect take away 10 sec from the timer
+
 function startTimer() {
   // Sets timer
   timer = setInterval(function() {
     timerCount--;
-    timerTracker.textContent = timerCount;
-    if (timerCount === 0) {
-      clearInterval(timer);
-      // Tests if timesIsOver condition is met OR lastQuestion has been answered
-      // if (renderQuestion) {
-      //   // Clears interval and stops timer
-      //   clearInterval(timer);
-      //   timeIsOver()
-      // }
-      //alert("time is over");
+    timerTracker.textContent = `Time: ${timerCount}`;
+    if (timerCount>=0) {
+      // if selected answer is incorrect take away 10 sec from the timer
+      if (wrongAnswer){
+       timerCount-10;
+      }
+      //test if conditions are met
+      if(quizFinished || timerCount === 0){
+        clearInterval(timer);
+        alert('open score div')
+        //and pass function scores() and dislay endScreen div 
+      }
     }
-    // Tests if time has run out
-   
   }, 1000);
 }
 
-// do {
-//   // run quiz while condidions are met 
-//   let questionNumber = 0;
-//   } while (questionNumber === 10 || timerCount <= 0);
- 
 
-  //console.log(mappedQuestionsAndCodes);
-  
- 
-
-  //quizIsOver function  is called when timer reaches ==0 OR all questions has been answered
 // loop through array to display one question at a time 
-let currentQuestionNumber = 0;
+let questionsNumber = 10;
+
 
 function renderQuestions(){
-  // for (let currentQuestionNumber = 1; currentQuestionNumber <= 10; currentQuestionNumber ++){
-  //   console.log(currentQuestionNumber);
-  // }
 
   for(let i = 0; i < javascriptQuiz.length; i++) {
     var currentQuestion = javascriptQuiz[i].question;
@@ -118,52 +106,50 @@ function renderQuestions(){
      const optionsContainer = document.querySelector("#options");
      // Clear any existing options
      optionsContainer.innerHTML = "";
-
+ /// loop answer options
     for (let j = 0; j < Math.min(4, mappedQuizAnswers[i].options.length); j++) {
       const questionOptions = mappedQuizAnswers[i].options;
       // for loop to append button to each answer option
           const optionBtn = document.createElement("button");
           optionBtn.value = questionOptions[j].id; 
           var optionNumber = optionBtn.value;
-          var optionName  =questionOptions[j].text;// Optionally, set a unique value for each button
-          optionBtn.textContent = optionNumber // Accessing the text property of the option
+          var optionName  =questionOptions[j].text;
+          optionBtn.textContent = optionNumber 
           optionBtn.textContent = `${optionNumber}: ${optionName}`;
         
           optionsContainer.appendChild(optionBtn);    
+
   }
-   
+
   }
   
 }
 
-// function renderPossibleAnswers() {
-//   const options = document.querySelector("#options");
-
- 
-// }
-
-//------------------how to render one question after another logic -------//
-//createElement li and add it button to each answer option
-// hoover effect on answer when mouse on 
-// event click, with sound (correct or Incorrect) when answer is chosen it triggers toggleDivBlock to display feedback div visible
-  
+//function to     
     // first grab all elements with answer buttons loop through and add eventListener "click"
-    // for ( i = 0; I <numberOfAnswerButtons; i ++){
-    //     document.quesrySelectorAll(".answerBtn")[i].addEventListener("click", function(){
-    //         console.log(this);
-    //         this.style.color = "white"  // or hoover effect       
-            //  create loop   if correct play correctSound else play incorrect
-            // create condition if answer is wrong take away 10sec from the timer.
-    //     })
-    // }
+  //   for ( i = 0; i < questionOptions; i ++){
+  //     optionBtn.querySelectorAll("button")[i].addEventListener("click", function(){
+  //         console.log(this);
+  //         // this.style.color = "white"  // or hoover effect       
+  //         // create loop   if correct play correctSound else play incorrect
+  //         // create condition if answer is wrong take away 10sec from the timer.
+  //     })
+  // }
 
-      //play sound if correct/wrong when button clicked submit 
-      // var correctSound = new Audio("starter/assets/sfx/correct.wav")
-      // audio.play()
-      // var incorrectSound = new Audio("starter/assets/sfx/incorrect.wav")
-      // audio.play()
+//play sound if correct/wrong when button clicked submit 
+// var correctSound = new Audio("starter/assets/sfx/correct.wav")
+// audio.play()
+// var incorrectSound = new Audio("starter/assets/sfx/incorrect.wav")
+// audio.play()
 //feedback diplayes coorect or wrong message
 //display next question 
+
+
+
+//------------------how to render one question after another logic -------//
+
+
+// event click, with sound (correct or Incorrect) when answer is chosen it triggers toggleDivBlock to display feedback div visible
 
 
 
