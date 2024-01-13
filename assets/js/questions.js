@@ -115,4 +115,6 @@ const javascriptQuiz = [
 
 
 
-console.log(javascriptQuiz[0].code);
+
+
+//create function renderQuestions where you loop through the questions length and display first q with set of possible answers. 

@@ -1,9 +1,8 @@
 
 //index.html  CODING QUIZ
 
-//create array of questions and array of answers to them  or may be object with arrays of q and ans
-//create func to set up timer countdown
-//create function quizzQuestions where you loop through the questions length and display first q with set of possible answers. 
+
+
 // start button triggers both timer function and quizzQuestions function 
 
 //click "start button" TIMER STARTS countdown 75 sec, page reveals first question  instantly. 
