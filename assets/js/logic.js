@@ -13,7 +13,7 @@ const feedback = document.querySelector("#feedback");
 
 let timer;
 let timerCount;
-let currentQuestion = '';
+
 let optionsIndexNumber = 0;
 
 //create init function, it's called when index.html page loads. may be it should call other functions?
@@ -23,7 +23,7 @@ let optionsIndexNumber = 0;
 var startBtn = document.getElementById("start");
 startBtn.addEventListener("click", function(){
   toggleDivBlocks()
-  //startQuiz();
+  startQuiz();
 
 })
 
@@ -55,15 +55,17 @@ function toggleDivBlocks(){
 
 
 
-//quizIsOver function  is called when timer reaches ==0 OR all questions has been answered
+
 
 // The startQuiz function is called when the start button is clicked
 function startQuiz() {
-  timerCount = 75;
+  timerCount = 10;
   
-  renderQuestions()  // displayes 1 question on screen 
-  startTimer()
+  renderQuestions()
+  // renderPossibleAnswers()  // displayes 1 question on screen 
+  //startTimer()
 }
+
 
 
 
@@ -75,6 +77,7 @@ function startTimer() {
     timerCount--;
     timerTracker.textContent = timerCount;
     if (timerCount === 0) {
+      clearInterval(timer);
       // Tests if timesIsOver condition is met OR lastQuestion has been answered
       // if (renderQuestion) {
       //   // Clears interval and stops timer
@@ -87,15 +90,58 @@ function startTimer() {
    
   }, 1000);
 }
-// loop through mapped array to display one question at a time 
-function renderQuestions(){
-  
-  for(let i=0; i < javascriptQuiz.length; i++) {
-    currentQuestion = javascriptQuiz[i];
-    console.log(`Question 1 ${currentQuestion.question};`)
-  }
 
+// do {
+//   // run quiz while condidions are met 
+//   let questionNumber = 0;
+//   } while (questionNumber === 10 || timerCount <= 0);
+ 
+
+  //console.log(mappedQuestionsAndCodes);
+  
+ 
+
+  //quizIsOver function  is called when timer reaches ==0 OR all questions has been answered
+// loop through array to display one question at a time 
+let currentQuestionNumber = 0;
+
+function renderQuestions(){
+  // for (let currentQuestionNumber = 1; currentQuestionNumber <= 10; currentQuestionNumber ++){
+  //   console.log(currentQuestionNumber);
+  // }
+
+  for(let i = 0; i < javascriptQuiz.length; i++) {
+    var currentQuestion = javascriptQuiz[i].question;
+    questionTitle.textContent = currentQuestion;
+    //create btn and append it to each answer option
+     // Select the options container
+     const optionsContainer = document.querySelector("#options");
+     // Clear any existing options
+     optionsContainer.innerHTML = "";
+
+    for (let j = 0; j < Math.min(4, mappedQuizAnswers[i].options.length); j++) {
+      const questionOptions = mappedQuizAnswers[i].options;
+      // for loop to append button to each answer option
+          const optionBtn = document.createElement("button");
+          optionBtn.value = questionOptions[j].id; 
+          var optionNumber = optionBtn.value;
+          var optionName  =questionOptions[j].text;// Optionally, set a unique value for each button
+          optionBtn.textContent = optionNumber // Accessing the text property of the option
+          optionBtn.textContent = `${optionNumber}: ${optionName}`;
+        
+          optionsContainer.appendChild(optionBtn);    
+  }
+   
+  }
+  
 }
+
+// function renderPossibleAnswers() {
+//   const options = document.querySelector("#options");
+
+ 
+// }
+
 //------------------how to render one question after another logic -------//
 //createElement li and add it button to each answer option
 // hoover effect on answer when mouse on 
