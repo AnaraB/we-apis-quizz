@@ -1,7 +1,7 @@
 const timerTracker = document.querySelector(".timer");
 const startScreen = document.querySelector("#start-screen");
 const start = document.querySelector("#start");
-const question = document.querySelector("#questions");
+const questionsDiv = document.querySelector("#questions");
 const questionTitle = document.querySelector("#question-title");
 const codeExample = document.querySelector("#codeExample");
 const options = document.querySelector("#options");
@@ -24,46 +24,35 @@ let optionsIndexNumber = 0;
 // add event listener when button start is clicked 
 var startBtn = document.getElementById("start");
 startBtn.addEventListener("click", function(){
-  toggleDivBlocks()
+  hideDiv(startScreen);
+  showDiv(questionsDiv);
   startQuiz();
 
 })
 
-//create function that triggers div visibility functions, 4 divs with add or remove class "hide" 
-function toggleDivBlocks(){
-  const startScreen = "start-screen";
-  const questionsBlock = "questions";
-  const endScreen = "end-screen";
-  const feedback = "feedback";
+//--------------Two functions that triggers div blocks visibility---------------//
 
-    function showDiv(element){
-      let divId = document.getElementById(element);
+    function showDiv(divId){
       divId.classList.remove('hide');
       divId.classList.add('show');
 
     }
 
-    function hideDiv(element){
-      let divId = document.getElementById(element);
+    function hideDiv(divId){
       divId.classList.add('hide');
       divId.classList.remove('show');
 
     }
-    // write conditional statements when to show or hide div blocks 
-    hideDiv(startScreen);
-    showDiv(questionsBlock);
+//------------------------------------------------------------------------//
 
-}
-
-
-
+  
 // The startQuiz function is called when the start button is clicked
 function startQuiz() {
   quizFinished = false;
   timerCount = 5;
   
   renderQuestions()
-  // renderPossibleAnswers()  // displayes 1 question on screen 
+
   startTimer()
 }
 
@@ -84,7 +73,9 @@ function startTimer() {
       //test if conditions are met
       if(quizFinished || timerCount === 0){
         clearInterval(timer);
-        alert('open score div')
+        hideDiv(questionsDiv);
+        showDiv(endScreen);
+     
         //and pass function scores() and dislay endScreen div 
       }
     }
@@ -129,8 +120,7 @@ function renderQuestions(){
     // first grab all elements with answer buttons loop through and add eventListener "click"
   //   for ( i = 0; i < questionOptions; i ++){
   //     optionBtn.querySelectorAll("button")[i].addEventListener("click", function(){
-  //         console.log(this);
-  //         // this.style.color = "white"  // or hoover effect       
+  //         console.log(this);     
   //         // create loop   if correct play correctSound else play incorrect
   //         // create condition if answer is wrong take away 10sec from the timer.
   //     })
