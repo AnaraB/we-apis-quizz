@@ -14,8 +14,7 @@ const feedback = document.querySelector("#feedback");
 let timer;
 let timerCount;
 let quizFinished = false;
-let wrongAnswer = false;
-
+//let wrongAnswer = false;
 let userScore = 0;
 
 
@@ -90,7 +89,7 @@ const optionsContainer = document.querySelector("#options");
 function renderQuestion(){
   const question = javascriptQuiz[currentQuestionIndex];
 
-  questionsDiv.innerHTML = question.question;
+  questionTitle.innerHTML = question.question;
 
   // Clear any existing options
   //optionsContainer.innerHTML = "";
@@ -98,23 +97,25 @@ function renderQuestion(){
   question.options.forEach((option, index) => {
     const button = document.createElement('button');
     button.textContent = option;
-    button.classList.add('option');
-    button.addEventListener('click', () => checkAnswer(index));
+    //button.classList.add('option');
+    button.addEventListener('click', checkAnswer);
     optionsContainer.appendChild(button);
     
   });
  
 } 
 
+var correctSound = new Audio("./assets/sfx/correct.wav");
+var wrongSound =  new Audio("./assets/sfx/incorrect.wav");
 
 function checkAnswer(event) {
-  let userAnswer = event.target;
+  let userAnswer = event.target.textContent;
+  console.log(userAnswer);
   const question = javascriptQuiz[currentQuestionIndex];
   //check if answer correct play Correct sound and display message
   if (userAnswer === question.correctAnswer) {
      showDiv(feedback);
-     feedback.textContent = "Correct!"
-     var correctSound = new Audio("starter/assets/sfx/correct.wav")
+     feedback.textContent = "Correct!";
      correctSound.play();
      
      currentQuestionIndex++;
@@ -130,11 +131,12 @@ function checkAnswer(event) {
   } else {
   //if answer iz incorrect play wrong sound and display message
       showDiv(feedback);
-      feedback.textContent = "Wrong!"
-      var wrongSound =  new Audio("starter/assets/sfx/incorrect.wav")
+      feedback.textContent = "Wrong!";
       wrongSound.play();
-      timeLeft -= 10;
+      timerCount -= 10;
       renderQuestion();
+
+     
   }
 }
 
