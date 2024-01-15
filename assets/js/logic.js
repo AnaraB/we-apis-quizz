@@ -14,7 +14,6 @@ const feedback = document.querySelector("#feedback");
 let timer;
 let timerCount;
 let quizFinished = false;
-//let wrongAnswer = false;
 let userScore = 0;
 
 
@@ -51,9 +50,7 @@ startBtn.addEventListener("click", function(){
 function startQuiz() {
   quizFinished = false;
   timerCount = 75;
-  
   renderQuestion()
-
   startTimer()
 }
 
@@ -68,11 +65,12 @@ function startTimer() {
     timerTracker.textContent = `Time: ${timerCount}`;
     if (timerCount>=0) {
       //test if conditions are met
-      if(quizFinished || timerCount === 0){
+      if(quizFinished || timerCount <= 0){
         clearInterval(timer);
         hideDiv(questionsDiv);
         showDiv(endScreen);
         showFinalScore();
+        hideDiv(feedback);
       }
     }
   }, 1000);
@@ -91,17 +89,21 @@ function renderQuestion(){
 
   questionTitle.innerHTML = question.question;
 
-  // Clear any existing options
-  //optionsContainer.innerHTML = "";
- // loop and display option answers and add button element to each answer
-  question.options.forEach((option, index) => {
-    const button = document.createElement('button');
-    button.textContent = option;
-    //button.classList.add('option');
-    button.addEventListener('click', checkAnswer);
-    optionsContainer.appendChild(button);
-    
-  });
+   // Clear any existing options
+   optionsContainer.innerHTML = "";
+
+
+      // Limit the loop to 4 options
+      for (let j = 0; j < Math.min(4, mappedQuizAnswers[currentQuestionIndex].options.length); j++) {
+        const optionBtn = document.createElement("button");
+        const answerID = mappedQuizAnswers[currentQuestionIndex].options[j].id;
+        const answerText = mappedQuizAnswers[currentQuestionIndex].options[j].text;
+        optionBtn.textContent = `${answerID}. ${answerText}`
+        optionBtn.addEventListener('click', checkAnswer);
+        optionsContainer.appendChild(optionBtn);
+  
+    }
+
  
 } 
 
@@ -109,47 +111,48 @@ var correctSound = new Audio("./assets/sfx/correct.wav");
 var wrongSound =  new Audio("./assets/sfx/incorrect.wav");
 
 function checkAnswer(event) {
+  
   let userAnswer = event.target.textContent;
-  console.log(userAnswer);
   const question = javascriptQuiz[currentQuestionIndex];
-  //check if answer correct play Correct sound and display message
+  //check if answer correct 
   if (userAnswer === question.correctAnswer) {
-     showDiv(feedback);
-     feedback.textContent = "Correct!";
-     correctSound.play();
-     
-     currentQuestionIndex++;
-     userScore ++;
-     console.log(userScore);
-     // when quiz is over
-      if(currentQuestionIndex === javascriptQuiz.length  || timerCount === 0) {
-        //chnage boolean quizFinished to true 
-        quizFinished = true;
-      } else {  // else there are more questions 
-        renderQuestion();
-    } 
-  } else {
-  //if answer iz incorrect play wrong sound and display message
-      showDiv(feedback);
-      feedback.textContent = "Wrong!";
-      wrongSound.play();
-      timerCount -= 10;
-      renderQuestion();
-
-     
+    showDiv(feedback);
+    feedback.textContent = "Correct!";
+    correctSound.play();
+    userScore ++;
+    console.log(userScore);
+    } else {
+      //incorrect answer logic
+    showDiv(feedback);
+    feedback.textContent = "Wrong!";
+    wrongSound.play();
+    timerCount -= 10;
+    renderQuestion();     
   }
+
+//Proceed to the next question or end the quiz
+  currentQuestionIndex++;
+    if(currentQuestionIndex < javascriptQuiz.length && timerCount > 0) {
+    renderQuestion();   
+  
+    } else {  
+      quizFinished = true;
+      console.log("quiz finished");
+  } 
+ 
+  
 }
 
 
+
 const showFinalScore = function () {
- finalScore.textContent = `${userScore}.`;
+ finalScore.textContent = `${userScore}`;
 }
  
 
 
-
-
     // input form text to type student initials and sumbit button.
+    //store all local storage
     // When submit is clicked redirect to highscore.html page
 
 //-------------what we reneder on higscore.html page-----------------------//

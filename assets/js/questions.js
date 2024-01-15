@@ -53,7 +53,7 @@ const javascriptQuiz = [
   ];
   
 
-//use nested map method to create new array with ANSWER OPTIONS
+//use nested map method to create new array with ANSWER OPTIONS and ID
 const mappedQuizAnswers = javascriptQuiz.map((question) => {
     const mappedOptions = question.options.map((option, index) => {
         return {
@@ -66,16 +66,7 @@ return {
 };
 });
   
-//use nested map method to create new array with CORRECT ANSWERS
-const mappedCorrectsAnswers= javascriptQuiz.map((question) => {
-return question.correctAnswer
 
-});
-
-
-
-// console.log(mappedQuizAnswers);
-// console.log(mappedCorrectsAnswers);
 
 
 
