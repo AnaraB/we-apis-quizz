@@ -4,7 +4,7 @@ const start = document.querySelector("#start");
 const questionsDiv = document.querySelector("#questions");
 const questionTitle = document.querySelector("#question-title");
 const codeExample = document.querySelector("#codeExample");
-const options = document.querySelector("#options");
+const answerChoices = document.querySelector(".choices");
 const endScreen = document.querySelector("#end-screen");
 const finalScore = document.querySelector("#final-score");
 const initials = document.querySelector("#initials");
@@ -16,7 +16,9 @@ let timerCount;
 let quizFinished = false;
 let wrongAnswer = false;
 
-let optionsIndexNumber = 0;
+let userScore = 0;
+
+
 
 //create init function, it's called when index.html page loads. may be it should call other functions?
 
@@ -49,9 +51,9 @@ startBtn.addEventListener("click", function(){
 // The startQuiz function is called when the start button is clicked
 function startQuiz() {
   quizFinished = false;
-  timerCount = 5;
+  timerCount = 75;
   
-  renderQuestions()
+  renderQuestion()
 
   startTimer()
 }
@@ -66,85 +68,85 @@ function startTimer() {
     timerCount--;
     timerTracker.textContent = `Time: ${timerCount}`;
     if (timerCount>=0) {
-      // if selected answer is incorrect take away 10 sec from the timer
-      if (wrongAnswer){
-       timerCount-10;
-      }
       //test if conditions are met
       if(quizFinished || timerCount === 0){
         clearInterval(timer);
         hideDiv(questionsDiv);
         showDiv(endScreen);
-     
-        //and pass function scores() and dislay endScreen div 
+        showFinalScore();
       }
     }
   }, 1000);
 }
 
 
-// loop through array to display one question at a time 
-let questionsNumber = 10;
+// loop through quiz array to display one question at a time 
+
+//Initialize a variable to keep track of the current question index.
+let currentQuestionIndex = 0;
+
+const optionsContainer = document.querySelector("#options");
+
+function renderQuestion(){
+  const question = javascriptQuiz[currentQuestionIndex];
+
+  questionsDiv.innerHTML = question.question;
+
+  // Clear any existing options
+  //optionsContainer.innerHTML = "";
+ // loop and display option answers and add button element to each answer
+  question.options.forEach((option, index) => {
+    const button = document.createElement('button');
+    button.textContent = option;
+    button.classList.add('option');
+    button.addEventListener('click', () => checkAnswer(index));
+    optionsContainer.appendChild(button);
+    
+  });
+ 
+} 
 
 
-function renderQuestions(){
-
-  for(let i = 0; i < javascriptQuiz.length; i++) {
-    var currentQuestion = javascriptQuiz[i].question;
-    questionTitle.textContent = currentQuestion;
-    //create btn and append it to each answer option
-     // Select the options container
-     const optionsContainer = document.querySelector("#options");
-     // Clear any existing options
-     optionsContainer.innerHTML = "";
- /// loop answer options
-    for (let j = 0; j < Math.min(4, mappedQuizAnswers[i].options.length); j++) {
-      const questionOptions = mappedQuizAnswers[i].options;
-      // for loop to append button to each answer option
-          const optionBtn = document.createElement("button");
-          optionBtn.value = questionOptions[j].id; 
-          var optionNumber = optionBtn.value;
-          var optionName  =questionOptions[j].text;
-          optionBtn.textContent = optionNumber 
-          optionBtn.textContent = `${optionNumber}: ${optionName}`;
-        
-          optionsContainer.appendChild(optionBtn);    
-
+function checkAnswer(event) {
+  let userAnswer = event.target;
+  const question = javascriptQuiz[currentQuestionIndex];
+  //check if answer correct play Correct sound and display message
+  if (userAnswer === question.correctAnswer) {
+     showDiv(feedback);
+     feedback.textContent = "Correct!"
+     var correctSound = new Audio("starter/assets/sfx/correct.wav")
+     correctSound.play();
+     
+     currentQuestionIndex++;
+     userScore ++;
+     console.log(userScore);
+     // when quiz is over
+      if(currentQuestionIndex === javascriptQuiz.length  || timerCount === 0) {
+        //chnage boolean quizFinished to true 
+        quizFinished = true;
+      } else {  // else there are more questions 
+        renderQuestion();
+    } 
+  } else {
+  //if answer iz incorrect play wrong sound and display message
+      showDiv(feedback);
+      feedback.textContent = "Wrong!"
+      var wrongSound =  new Audio("starter/assets/sfx/incorrect.wav")
+      wrongSound.play();
+      timeLeft -= 10;
+      renderQuestion();
   }
-
-  }
-  
 }
 
-//function to     
-    // first grab all elements with answer buttons loop through and add eventListener "click"
-  //   for ( i = 0; i < questionOptions; i ++){
-  //     optionBtn.querySelectorAll("button")[i].addEventListener("click", function(){
-  //         console.log(this);     
-  //         // create loop   if correct play correctSound else play incorrect
-  //         // create condition if answer is wrong take away 10sec from the timer.
-  //     })
-  // }
 
-//play sound if correct/wrong when button clicked submit 
-// var correctSound = new Audio("starter/assets/sfx/correct.wav")
-// audio.play()
-// var incorrectSound = new Audio("starter/assets/sfx/incorrect.wav")
-// audio.play()
-//feedback diplayes coorect or wrong message
-//display next question 
+const showFinalScore = function () {
+ finalScore.textContent = `${userScore}.`;
+}
+ 
 
 
 
-//------------------how to render one question after another logic -------//
 
-
-// event click, with sound (correct or Incorrect) when answer is chosen it triggers toggleDivBlock to display feedback div visible
-
-
-
-// when all questions have been answered  ALL DONE! message is displayed and
-    // message with the  final score {studentScore} displayed on next line 
     // input form text to type student initials and sumbit button.
     // When submit is clicked redirect to highscore.html page
 
@@ -152,5 +154,3 @@ function renderQuestions(){
 //line 8 in highscores.html, under title create dataset visible line with  student's quizz results with initials and scores. 
 // #clear CLEAR HIGHSCORE BUTTON hides the line with student results 
 // GO BACK BUTTTON navigates to index.html page to start quizz again
-
-
