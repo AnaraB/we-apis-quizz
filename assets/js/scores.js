@@ -4,5 +4,5 @@ const clearButton = document.querySelector("#clear");
 
 
 
-getInitials();
-getScores();
+
+console.log(getInitials);

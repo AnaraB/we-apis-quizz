@@ -16,10 +16,6 @@ let quizFinished = false;
 let userScore = 0;
 
 
-
-//create init function, it's called when index.html page loads. may be it should call other functions?
-
-
 // add event listener when button start is clicked 
 var startBtn = document.getElementById("start");
 startBtn.addEventListener("click", function(){
@@ -76,7 +72,6 @@ function startTimer() {
   }, 1000);
 }
 
-
 // loop through quiz array to display one question at a time 
 
 //Initialize a variable to keep track of the current question index.
@@ -92,7 +87,6 @@ function renderQuestion(){
    // Clear any existing options
    optionsContainer.innerHTML = "";
 
-
       // Limit the loop to 4 options
       for (let j = 0; j < Math.min(4, mappedQuizAnswers[currentQuestionIndex].options.length); j++) {
         const optionBtn = document.createElement("button");
@@ -102,9 +96,7 @@ function renderQuestion(){
         optionBtn.textContent = `${answerID}: ${answerText}`
         optionBtn.addEventListener('click', checkAnswer);
         optionsContainer.appendChild(optionBtn);
-  
     }
-
  
 } 
 
@@ -112,6 +104,8 @@ var correctSound = new Audio("./assets/sfx/correct.wav");
 var wrongSound =  new Audio("./assets/sfx/incorrect.wav");
 
 function checkAnswer(event) {
+ // clear feedback message doesn't work ((
+  feedback.textContent = "";
 
   // Split user's answer to extract ID
   let userAnswer = event.target.textContent;
@@ -134,7 +128,6 @@ function checkAnswer(event) {
     renderQuestion();     
   }
 
-//hideDiv(feedback);
 //Proceed to the next question or end the quiz
 currentQuestionIndex++;
  // render all questions, one at a time untill questions finished
@@ -154,34 +147,32 @@ currentQuestionIndex++;
 }
 
 
+let userInitials = document.getElementById("initials");
+let input = userInitials.value;
+
 // Updates user initials and sets to client storage
 function setUserScoreAndInitials() {
-localStorage.setItem("userInitials", JSON.stringify(userInitials));
+
+localStorage.setItem("userInitials", JSON.stringify(input));
+console.log(input);
  localStorage.setItem("scores", JSON.stringify(userScore));
  
 }
-
-
-
-let userInitials = document.querySelector("#initials");
-let input = userInitials.value;
 
 submitInitials.addEventListener('click', function(event) {
   event.preventDefault();
     // create user object from submission
     var user = {
-      userInitials: input.value,
-      scores: scores.value
-     
+      userInitials: input,
+      scores: userScore     
     };
-  if(user.input === " ") {
+
+  if(user.userInitials === "") {
     alert("Please type your name and surname initials");
   } else {
     // When submit is clicked redirect to highscore.html page
     window.location.href = "highscores.html";
   }
-
-  console.log(user);
 
   setUserScoreAndInitials();
  
@@ -204,7 +195,6 @@ function getScores() {
 
 function getInitials() {
 
-
   var storedUserInitials = JSON.parse(localStorage.getItem("userInitials"));
   if (storedUserInitials === null) {
     userInitials = 0;
@@ -213,3 +203,9 @@ function getInitials() {
   }
   initials.textContent = storedUserInitials;
 }
+
+getInitials();
+getScores();
+
+
+

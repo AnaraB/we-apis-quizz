@@ -1,11 +1,11 @@
 const javascriptQuiz = [
     {
-      question: "1) What is the correct way to declare a variable in JavaScript?",
+      question: " What is the correct way to declare a variable in JavaScript?",
       options: ["var x;", "variable x;", "x = 5;", "int x;"],
       correctAnswer: "var x;"
     },
     {
-      question: "2) Which of the following is not a JavaScript data type?",
+      question: "Which of the following is not a JavaScript data type?",
       options: ["String", "Boolean", "Number", "Float"],
       correctAnswer: "Float"
     },
@@ -35,19 +35,19 @@ const javascriptQuiz = [
         correctAnswer: "Math.round(7.25)"
       },
       {
-        question: "How do you find the number with the highest value of x and y?",
-        options: ["String", "Boolean", "Number", "Float"],
-        correctAnswer: "Float"
+        question: "Which operator is used to assign a value to a varibale?",
+        options: ["x", "=", "-", "*"],
+        correctAnswer: "="
       },
       {
-        question: "9) What is the output of the following code: console.log(2 + '2');",
-        options: ["4", "22", "NaN", "TypeError"],
-        correctAnswer: "22"
+        question: "Which event occurs when the user clicks on an HTML element?;",
+        options: ["onclick", "onchange", "onmouseover", "onmouseclick"],
+        correctAnswer: "onclick"
       },
       {
-        question: "10) last ---What is the output of the following code: console.log(2 + '2');",
-        options: ["4", "22", "NaN", "TypeError"],
-        correctAnswer: "22"
+        question: "How do you find the number with the highest value of x and y?;",
+        options: ["ceil(x,y)", "Math.ceil(x,y)", "Math.max(x,y)", "top(x,y)"],
+        correctAnswer: "Math.ceil(x,y)"
       }
    
   ];
