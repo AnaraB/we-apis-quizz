@@ -59,20 +59,21 @@ function startQuiz() {
 // The startTimer function starts and stops the timer and triggers quizIsOver()
 
 function startTimer() {
+  
   // Sets timer
   timer = setInterval(function() {
     timerCount--;
     timerTracker.textContent = `Time: ${timerCount}`;
-    if (timerCount>=0) {
-      //test if conditions are met
-      if(quizFinished || timerCount <= 0){
+      if(timerCount <= 0){
+        //clear timer 
+        timerTracker.textContent = "";
         clearInterval(timer);
         hideDiv(questionsDiv);
         showDiv(endScreen);
         showFinalScore();
         hideDiv(feedback);
       }
-    }
+  
   }, 1000);
 }
 
@@ -98,7 +99,8 @@ function renderQuestion(){
         const optionBtn = document.createElement("button");
         const answerID = mappedQuizAnswers[currentQuestionIndex].options[j].id;
         const answerText = mappedQuizAnswers[currentQuestionIndex].options[j].text;
-        optionBtn.textContent = `${answerID}. ${answerText}`
+        
+        optionBtn.textContent = `${answerID}: ${answerText}`
         optionBtn.addEventListener('click', checkAnswer);
         optionsContainer.appendChild(optionBtn);
   
@@ -111,11 +113,14 @@ var correctSound = new Audio("./assets/sfx/correct.wav");
 var wrongSound =  new Audio("./assets/sfx/incorrect.wav");
 
 function checkAnswer(event) {
-  
+
+  // Split user's answer to extract ID
   let userAnswer = event.target.textContent;
+  let userAnswerID = userAnswer.split(':')[1].trim();
+
   const question = javascriptQuiz[currentQuestionIndex];
   //check if answer correct 
-  if (userAnswer === question.correctAnswer) {
+  if (userAnswerID === question.correctAnswer) {
     showDiv(feedback);
     feedback.textContent = "Correct!";
     correctSound.play();
@@ -131,17 +136,22 @@ function checkAnswer(event) {
   }
 
 //Proceed to the next question or end the quiz
-  currentQuestionIndex++;
-    if(currentQuestionIndex < javascriptQuiz.length && timerCount > 0) {
-    renderQuestion();   
+currentQuestionIndex++;
+ // render all questions, one at a time untill questions finished
+  if (currentQuestionIndex < javascriptQuiz.length) {
+      renderQuestion();
+    }
   
-    } else {  
+// when time finished stop the quiz and show scores 
+  if (timerCount <= 0){
       quizFinished = true;
-      console.log("quiz finished");
-  } 
- 
-  
+      timerTracker.textContent = "";
+      showDiv(endScreen);
+      showFinalScore();
+    }
 }
+  
+
 
 
 
