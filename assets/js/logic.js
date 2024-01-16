@@ -69,7 +69,7 @@ function startTimer() {
         clearInterval(timer);
         hideDiv(questionsDiv);
         showDiv(endScreen);
-        showFinalScore();
+        getScores();
         hideDiv(feedback);
       }
   
@@ -148,6 +148,7 @@ currentQuestionIndex++;
       quizFinished = true;
       timerTracker.textContent = "";
       showDiv(endScreen);
+      hideDiv(feedback);
       getScores();
     }
 }
@@ -155,27 +156,41 @@ currentQuestionIndex++;
 
 // Updates user initials and sets to client storage
 function setUserScoreAndInitials() {
-  localStorage.setItem("userInitials", userInitials);
-  localStorage.setItem("scores", userScore);
+localStorage.setItem("userInitials", JSON.stringify(userInitials));
+ localStorage.setItem("scores", JSON.stringify(userScore));
+ 
 }
+
+
 
 let userInitials = document.querySelector("#initials");
 let input = userInitials.value;
 
 submitInitials.addEventListener('click', function(event) {
   event.preventDefault();
-  if(input === " ") {
+    // create user object from submission
+    var user = {
+      userInitials: input.value,
+      scores: scores.value
+     
+    };
+  if(user.input === " ") {
     alert("Please type your name and surname initials");
   } else {
     // When submit is clicked redirect to highscore.html page
     window.location.href = "highscores.html";
   }
+
+  console.log(user);
+
+  setUserScoreAndInitials();
+ 
 })
  
-// These functions are used by init
+// These 2 functions are used by init
 function getScores() {
   // Get stored value from client storage, if it exists
-  var storedScores = localStorage.getItem("scores");
+  var storedScores = JSON.parse(localStorage.getItem("scores"));
   // If stored value doesn't exist, set scores to 0
   if (storedScores === null) {
     scores = 0;
@@ -188,7 +203,9 @@ function getScores() {
 }
 
 function getInitials() {
-  var storedUserInitials = localStorage.getItem("userInitials");
+
+
+  var storedUserInitials = JSON.parse(localStorage.getItem("userInitials"));
   if (storedUserInitials === null) {
     userInitials = 0;
   } else {
@@ -196,8 +213,3 @@ function getInitials() {
   }
   initials.textContent = storedUserInitials;
 }
-
-//-------------what we reneder on higscore.html page-----------------------//
-//line 8 in highscores.html, under title create dataset visible line with  student's quizz results with initials and scores. 
-// #clear CLEAR HIGHSCORE BUTTON hides the line with student results 
-// GO BACK BUTTTON navigates to index.html page to start quizz again
