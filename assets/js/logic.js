@@ -7,8 +7,7 @@ const codeExample = document.querySelector("#codeExample");
 const answerChoices = document.querySelector(".choices");
 const endScreen = document.querySelector("#end-screen");
 const finalScore = document.querySelector("#final-score");
-const initials = document.querySelector("#initials");
-const submitButton = document.querySelector("#submit");
+const submitInitials = document.querySelector("#submit");
 const feedback = document.querySelector("#feedback");
 
 let timer;
@@ -135,10 +134,12 @@ function checkAnswer(event) {
     renderQuestion();     
   }
 
+//hideDiv(feedback);
 //Proceed to the next question or end the quiz
 currentQuestionIndex++;
  // render all questions, one at a time untill questions finished
   if (currentQuestionIndex < javascriptQuiz.length) {
+    
       renderQuestion();
     }
   
@@ -147,23 +148,54 @@ currentQuestionIndex++;
       quizFinished = true;
       timerTracker.textContent = "";
       showDiv(endScreen);
-      showFinalScore();
+      getScores();
     }
 }
-  
 
 
-
-
-const showFinalScore = function () {
- finalScore.textContent = `${userScore}`;
+// Updates user initials and sets to client storage
+function setUserScoreAndInitials() {
+  localStorage.setItem("userInitials", userInitials);
+  localStorage.setItem("scores", userScore);
 }
- 
 
+let userInitials = document.querySelector("#initials");
+let input = userInitials.value;
 
-    // input form text to type student initials and sumbit button.
-    //store all local storage
+submitInitials.addEventListener('click', function(event) {
+  event.preventDefault();
+  if(input === " ") {
+    alert("Please type your name and surname initials");
+  } else {
     // When submit is clicked redirect to highscore.html page
+    window.location.href = "highscores.html";
+  }
+})
+ 
+// These functions are used by init
+function getScores() {
+  // Get stored value from client storage, if it exists
+  var storedScores = localStorage.getItem("scores");
+  // If stored value doesn't exist, set scores to 0
+  if (storedScores === null) {
+    scores = 0;
+  } else {
+    // If a value is retrieved from client storage set the scores to that value
+    scores = storedScores;
+  }
+  //Render win scores to page
+  finalScore.textContent = `${userScore}`;
+}
+
+function getInitials() {
+  var storedUserInitials = localStorage.getItem("userInitials");
+  if (storedUserInitials === null) {
+    userInitials = 0;
+  } else {
+    userInitials = storedUserInitials;
+  }
+  initials.textContent = storedUserInitials;
+}
 
 //-------------what we reneder on higscore.html page-----------------------//
 //line 8 in highscores.html, under title create dataset visible line with  student's quizz results with initials and scores. 
