@@ -1,4 +1,4 @@
-const javascriptQuiz = [
+export const javascriptQuiz = [
     {
       question: " What is the correct way to declare a variable in JavaScript?",
       options: ["var x;", "variable x;", "x = 5;", "int x;"],
@@ -47,14 +47,14 @@ const javascriptQuiz = [
       {
         question: "How do you find the number with the highest value of x and y?;",
         options: ["ceil(x,y)", "Math.ceil(x,y)", "Math.max(x,y)", "top(x,y)"],
-        correctAnswer: "Math.ceil(x,y)"
+        correctAnswer: "Math.max(x,y)"
       }
    
   ];
   
 
 //use nested map method to create new array with ANSWER OPTIONS and ID
-const mappedQuizAnswers = javascriptQuiz.map((question) => {
+export const mappedQuizAnswers = javascriptQuiz.map((question) => {
     const mappedOptions = question.options.map((option, index) => {
         return {
             id: index + 1,

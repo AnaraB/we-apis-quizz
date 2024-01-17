@@ -1,13 +1,13 @@
+import {mappedQuizAnswers, javascriptQuiz} from './questions.js'; 
 const timerTracker = document.querySelector(".timer");
 const startScreen = document.querySelector("#start-screen");
 const start = document.querySelector("#start");
 const questionsDiv = document.querySelector("#questions");
 const questionTitle = document.querySelector("#question-title");
-const codeExample = document.querySelector("#codeExample");
-const answerChoices = document.querySelector(".choices");
+//const answerChoices = document.querySelector(".choices");
 const endScreen = document.querySelector("#end-screen");
 const finalScore = document.querySelector("#final-score");
-const submitInitials = document.querySelector("#submit");
+export const submitInitials = document.querySelector("#submit");
 const feedback = document.querySelector("#feedback");
 
 let timer;
@@ -44,7 +44,7 @@ startBtn.addEventListener("click", function(){
 // The startQuiz function is called when the start button is clicked
 function startQuiz() {
   quizFinished = false;
-  timerCount = 75;
+  timerCount = 15;
   renderQuestion()
   startTimer()
 }
@@ -65,7 +65,6 @@ function startTimer() {
         clearInterval(timer);
         hideDiv(questionsDiv);
         showDiv(endScreen);
-        getScores();
         hideDiv(feedback);
       }
   
@@ -142,70 +141,34 @@ currentQuestionIndex++;
       timerTracker.textContent = "";
       showDiv(endScreen);
       hideDiv(feedback);
-      getScores();
+      
     }
 }
 
 
+//export function expression, which updates user initials and sets them to client storage
+export var setUserScoreAndInitials = function() {
+  // reference initials element 
 let userInitials = document.getElementById("initials");
 let input = userInitials.value;
-
-// Updates user initials and sets to client storage
-function setUserScoreAndInitials() {
-
-localStorage.setItem("userInitials", JSON.stringify(input));
 console.log(input);
- localStorage.setItem("scores", JSON.stringify(userScore));
- 
-}
 
-submitInitials.addEventListener('click', function(event) {
-  event.preventDefault();
     // create user object from submission
     var user = {
       userInitials: input,
       scores: userScore     
     };
-
   if(user.userInitials === "") {
     alert("Please type your name and surname initials");
   } else {
     // When submit is clicked redirect to highscore.html page
     window.location.href = "highscores.html";
+    
   }
 
-  setUserScoreAndInitials();
+localStorage.setItem("userInitials", JSON.stringify(input));
+console.log(userInitials);
+localStorage.setItem("scores", JSON.stringify(userScore));
  
-})
- 
-// These 2 functions are used by init
-function getScores() {
-  // Get stored value from client storage, if it exists
-  var storedScores = JSON.parse(localStorage.getItem("scores"));
-  // If stored value doesn't exist, set scores to 0
-  if (storedScores === null) {
-    scores = 0;
-  } else {
-    // If a value is retrieved from client storage set the scores to that value
-    scores = storedScores;
-  }
-  //Render win scores to page
-  finalScore.textContent = `${userScore}`;
 }
-
-function getInitials() {
-
-  var storedUserInitials = JSON.parse(localStorage.getItem("userInitials"));
-  if (storedUserInitials === null) {
-    userInitials = 0;
-  } else {
-    userInitials = storedUserInitials;
-  }
-  initials.textContent = storedUserInitials;
-}
-
-getInitials();
-getScores();
-
-
 
