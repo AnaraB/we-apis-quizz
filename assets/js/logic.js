@@ -1,4 +1,5 @@
 import {mappedQuizAnswers, javascriptQuiz} from './questions.js'; 
+
 const timerTracker = document.querySelector(".timer");
 const startScreen = document.querySelector("#start-screen");
 const start = document.querySelector("#start");
@@ -44,7 +45,7 @@ startBtn.addEventListener("click", function(){
 // The startQuiz function is called when the start button is clicked
 function startQuiz() {
   quizFinished = false;
-  timerCount = 15;
+  timerCount = 75;
   renderQuestion()
   startTimer()
 }
@@ -147,16 +148,17 @@ currentQuestionIndex++;
 
 
 //export function expression, which updates user initials and sets them to client storage
-export var setUserScoreAndInitials = function() {
+function setUserScoreAndInitials() {
   // reference initials element 
 let userInitials = document.getElementById("initials");
+console.log(userInitials);
 let input = userInitials.value;
 console.log(input);
 
     // create user object from submission
     var user = {
       userInitials: input,
-      scores: userScore     
+      score: userScore     
     };
   if(user.userInitials === "") {
     alert("Please type your name and surname initials");
@@ -166,9 +168,27 @@ console.log(input);
     
   }
 
-localStorage.setItem("userInitials", JSON.stringify(input));
-console.log(userInitials);
-localStorage.setItem("scores", JSON.stringify(userScore));
+  const localHighscores = JSON.parse(localStorage.getItem("users")) || []
+  
+  localHighscores.push(user)
+  
+  localStorage.setItem("users", JSON.stringify(localHighscores));
  
 }
 
+
+
+// create click input submit event
+
+submitInitials.addEventListener('click', function(event) {
+  event.preventDefault();
+
+   //Render win scores to page
+   finalScore.textContent = `${userScore}`;
+
+ //call this function to store user information in local storage
+  setUserScoreAndInitials();
+
+ 
+})
+ 
