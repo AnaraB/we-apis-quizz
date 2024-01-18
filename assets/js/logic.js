@@ -45,7 +45,7 @@ startBtn.addEventListener("click", function(){
 // The startQuiz function is called when the start button is clicked
 function startQuiz() {
   quizFinished = false;
-  timerCount = 75;
+  timerCount = 60;
   renderQuestion()
   startTimer()
 }
@@ -103,6 +103,8 @@ function renderQuestion(){
 var correctSound = new Audio("./assets/sfx/correct.wav");
 var wrongSound =  new Audio("./assets/sfx/incorrect.wav");
 
+
+
 function checkAnswer(event) {
  // clear feedback message doesn't work ((
   feedback.textContent = "";
@@ -131,21 +133,28 @@ function checkAnswer(event) {
 //Proceed to the next question or end the quiz
 currentQuestionIndex++;
  // render all questions, one at a time untill questions finished
-  if (currentQuestionIndex < javascriptQuiz.length) {
-    
+  if (currentQuestionIndex < javascriptQuiz.length) { 
       renderQuestion();
+    } else {
+      quizFinished = true; 
+  
     }
   
 // when time finished stop the quiz and show scores 
-  if (timerCount <= 0){
+  if (timerCount <= 0 || currentQuestionIndex === javascriptQuiz.length){
       quizFinished = true;
       timerTracker.textContent = "";
       showDiv(endScreen);
+      hideDiv(questionsDiv);
       hideDiv(feedback);
       
     }
+
+  //Render win scores to page
+  finalScore.textContent = `${userScore}`;
 }
 
+console.log(userScore);
 
 //export function expression, which updates user initials and sets them to client storage
 function setUserScoreAndInitials() {
@@ -173,21 +182,21 @@ console.log(input);
   localHighscores.push(user)
   
   localStorage.setItem("users", JSON.stringify(localHighscores));
+
+  
  
 }
-
-
 
 // create click input submit event
 
 submitInitials.addEventListener('click', function(event) {
   event.preventDefault();
 
-   //Render win scores to page
-   finalScore.textContent = `${userScore}`;
 
  //call this function to store user information in local storage
   setUserScoreAndInitials();
+
+  console.log(setUserScoreAndInitials);
 
  
 })

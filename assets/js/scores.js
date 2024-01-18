@@ -8,13 +8,13 @@ const clearButton = document.querySelector("#clear");
 function getUsers() {
   // Get stored value from client storage, if it exists or get an empty array
   var storedScores = JSON.parse(localStorage.getItem("users")) || []
-  //console.log(storedScores);
+  
+  displayUsers(storedScores);
 
 }
 
 //call function
 getUsers();
-
 
 //create function to display users results in a list, highest first
 function displayUsers(storedScores){
@@ -25,6 +25,10 @@ function displayUsers(storedScores){
     var highscoreListItem = document.createElement('li');
     highscoreListItem.textContent = `${userScore.userInitials} -- ${userScore.score}`
     highscores.appendChild(highscoreListItem);
+
+
+  
+
   });
 
 }
@@ -33,5 +37,5 @@ function displayUsers(storedScores){
 
 // clear list of scores and user initials 
 clearButton.addEventListener('click', function(){
-  highscores.innerHTML = "";
+  highscores.textContent = "";
 })
